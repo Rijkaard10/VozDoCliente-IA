@@ -1,6 +1,7 @@
 # Projeto TDE: VozDoCliente IA (Análise de Feedbacks)
 
-**Alunos:** Rijkaard de Sousa de Andrade, Diego Paim, Erik nogueira, Rafael
+**Repositório:** [Link do seu GitHub]
+**Alunos:** Rijkaard de Sousa de Andrade, [Nome 2], [Nome 3], [Nome 4]
 **Disciplina:** Computação em Nuvem (Unifan 2026.2)
 
 ---
@@ -11,52 +12,84 @@ O **VozDoCliente IA** é uma plataforma baseada em nuvem para capturar, processa
 **O Grande Diferencial:** Além da análise de sentimento padrão, o nosso sistema integra a API do Google Gemini para gerar automaticamente uma **"Sugestão de Plano de Ação"** direcionada ao gestor, transformando reclamações ou elogios em tarefas acionáveis e estratégicas de forma imediata.
 
 ## 2. Jornadas de Usuário e Usabilidade
-A usabilidade foi pensada para ser fluida e sem gargalos de carregamento:
-1. **Envio (Cliente):** O cliente acessa a interface web estática (HTML/JS) e envia seu feedback. O formulário é limpo imediatamente, sem travamentos (processamento assíncrono).
-2. **Processamento (Backend):** O frontend dispara uma requisição POST para a nossa API Serverless.
-3. **Análise (IA):** A API Serverless empacota o texto e aciona o Google Gemini, solicitando o sentimento e o plano de ação.
-4. **Armazenamento:** A resposta estruturada é salva no banco de dados NoSQL (Firebase Firestore).
-5. **Consumo (Gestor):** O gestor acessa um Dashboard que escuta o Firestore em tempo real (Real-time listener), visualizando os novos feedbacks e os planos de ação gerados pela IA instantaneamente.
 
-## 3. System Design e Arquitetura Cloud (Diagramas)
+**Jornada do Usuário Final (Cliente):**
+1. **Envio:** O cliente acessa a interface web estática (HTML/JS) e envia seu feedback. O formulário é limpo imediatamente, sem travamentos (processamento assíncrono).
+2. **Processamento (Backend):** O frontend dispara uma requisição `POST` para a nossa API Serverless.
+3. **Análise (IA):** A API Serverless empacota o texto e aciona a `Google Gemini API`, solicitando o sentimento e o plano de ação.
+4. **Armazenamento:** A resposta estruturada é salva no banco de dados NoSQL (`Firebase Firestore`).
+5. **Consumo (Gestor):** O gestor acessa um Dashboard que escuta o Firestore em tempo real, visualizando os novos feedbacks instantaneamente.
 
-Optamos por uma arquitetura PaaS/Serverless focada em Custo Zero, utilizando Vercel e Firebase.
+**Usabilidade e Developer Experience (DX):**
+* Retornos e *status codes* HTTP padronizados (ex: `200 OK`, `401 Unauthorized`).
+* Rotas bem definidas (`/api/v1/feedbacks`).
 
-### Arquitetura de Componentes
+## 3. System Design e Arquitetura Cloud (AWS / GCP)
 
+Optamos por uma arquitetura focada em **Custo Zero**, utilizando o ecossistema Firebase (GCP) e Vercel.
+
+**Arquitetura de Componentes (Mermaid):**
+```mermaid
 graph TD
-    A[Cliente / Interface Web] -->|HTTP POST| B(Vercel: Serverless Function - Python)
+    A[Cliente / Navegador] -->|HTTP POST| B(Vercel: Serverless Function - Python)
     B -->|REST API| C{Google Gemini API}
     C -->|Retorna Sentimento e Ação| B
-    B -->|Grava Documento| D[(Firebase Firestore NoSQL)]
-    E[Dashboard do Gestor] -->|Leitura Real-time| D
+    B -->|Gravação| D[(Firebase Firestore NoSQL)]
+    E[Gestor / Dashboard] -->|Real-time Listener| D
+```
 
-Fluxo de CI/CD (GitHub Actions)
-
+**Fluxo de CI/CD (GitHub Actions):**
+```mermaid
 sequenceDiagram
     participant Dev as Desenvolvedor
     participant Git as GitHub
     participant CI as GitHub Actions
     participant Cloud as Vercel / Firebase
 
-    Dev->>Git: Git Push (branch main)
-    Git->>CI: Trigger do Pipeline Automático
-    CI->>CI: Executa Testes e Lint
+    Dev->>Git: Push na branch main
+    Git->>CI: Trigger do Pipeline
+    CI->>CI: Run Tests (Pytest / Jest)
     CI->>Cloud: Deploy Automático
-    Cloud-->>Dev: Aplicação Atualizada em Produção
+    Cloud-->>Dev: URL de Produção Atualizada
+```
 
-4. Segurança e Gestão de AcessosGestão de Secrets (Least Privilege): Nenhuma chave de API (Google Gemini) ou credencial de banco de dados é exposta no frontend. Elas ficam isoladas como Variáveis de Ambiente (.env) gerenciadas pelos Secrets da Vercel.Regras de Banco de Dados (Firestore Security Rules): O banco de dados bloqueia operações de gravação não autenticadas vindas da internet (allow write: if false;). Apenas o backend Serverless (usando o SDK Admin com credenciais de serviço) possui permissão para gravar os dados.Proteção de Borda: Utilização do rate-limiting nativo da plataforma de hospedagem para mitigar abusos e evitar o esgotamento da cota gratuita da API do Gemini.
+## 4. Segurança e Gestão de Acessos
+* **Gestão de Secrets (Least Privilege):** As chaves de API (`GEMINI_API_KEY`) nunca são expostas no código cliente. Elas são gerenciadas exclusivamente no backend via Variáveis de Ambiente (`.env`).
+* **Regras de Banco de Dados (Security Rules):** O `Firestore Security Rules` bloqueia gravações diretas vindas do cliente (`allow write: if false;`), permitindo gravação apenas pelas funções Serverless autenticadas.
+* **Proteção de Borda:** Implementação de Rate Limit nas funções de entrada para evitar esgotamento da cota gratuita.
 
-5. Planejamento de Escalonamento (Auto Scaling)A grande vantagem da escolha de uma arquitetura 100% Event-Driven e Serverless é que o escalonamento horizontal é gerenciado pelo provedor de nuvem:Scale-out (Picos de uso): Se houver um aumento massivo de feedbacks simultâneos, a plataforma Vercel provisiona novos containers da função Python paralelamente, sem necessidade de configurar Auto Scaling Groups de EC2.Scale-in (Scale-to-zero): Em momentos de ociosidade (madrugada, por exemplo), os recursos computacionais são reduzidos a zero, garantindo que a aplicação não consuma cotas ou gere custos desnecessários.
+## 5. Planejamento de Escalonamento (Auto Scaling)
+Por adotarmos uma arquitetura 100% orientada a eventos e **Serverless**:
+* **Scale-out:** Em picos de acessos repentinos, a plataforma provisionará instâncias concorrentes automaticamente.
+* **Scale-in (Scale-to-zero):** Quando o sistema ficar ocioso, a infraestrutura reduz a zero o número de containers rodando.
 
-6. Estrutura de Banco de Dados (Firestore NoSQL)Utilizaremos o modelo baseado em documentos para flexibilidade e velocidade de leitura.Coleção: feedbacks_analisadosid: String (Gerado automaticamente)cliente_nome: Stringfeedback_original: Stringsentimento: String (Enum: POSITIVO, NEGATIVO, NEUTRO)plano_de_acao: String (Gerado pelo Gemini)data_envio: Timestamp
+## 6. Estrutura de Banco de Dados (Firestore NoSQL)
 
-7. Detalhamento de Custos Mensais (Planejamento)O projeto foi rigorosamente desenhado para se manter dentro dos limites do Free Tier (Nível Gratuito) das plataformas escolhidas.
+A estrutura em documentos (Coleção `feedbacks`) foca em leituras rápidas:
 
-Serviço / Recurso	Função na Arquitetura	Plano Utilizado	Custo (USD)
-Vercel Hosting	Hospedagem do Frontend estático	Hobby Tier (Gratuito)	$0.00
-Vercel Functions	API Backend Serverless (Python)	Hobby Tier (100k req/mês)	$0.00
-Firebase Firestore	Banco de Dados NoSQL	Spark Plan (1GB, 50k leituras/dia)	$0.00
-Google Gemini API	Processamento de IA e NLP	Free Tier (Limites de RPM padrão)	$0.00
-GitHub	Repositório, CI/CD e Secrets	Free Plan	$0.00
-Total Mensal Estimado	Ambiente completo de produção	-	$0.00
+| Coleção | Campo | Tipo | Descrição |
+|---|---|---|---|
+| feedbacks | `id` | String | Identificador único auto-gerado. |
+| feedbacks | `cliente_nome` | String | Nome preenchido no formulário. |
+| feedbacks | `texto_original` | String | O feedback bruto recebido. |
+| feedbacks | `sentimento_ia` | String | POSITIVO, NEGATIVO ou NEUTRO. |
+| feedbacks | `plano_acao_ia` | String | Ação gerada automaticamente pelo Gemini. |
+| feedbacks | `timestamp` | Date | Data e hora exata do recebimento. |
+
+## 7. Design de Software e API REST
+
+**Rotas Principais:**
+* `POST /api/v1/feedbacks`: Recebe o payload do cliente `{"nome": "João", "texto": "Amei o serviço!"}` e inicia a esteira de processamento com a IA.
+* `GET /api/v1/dashboard/metricas`: Retorna a contagem de sentimentos agregada para o gestor.
+
+## 8. Detalhamento de Custos Mensais
+
+A estimativa garante aderência aos limites gratuitos estabelecidos no escopo do projeto TDE.
+
+| Serviço | Descrição de Uso | Plano / Tier | Custo (USD) |
+|---|---|---|---|
+| **Vercel Hosting** | Hospedagem estática (HTML/JS) | Free Tier (Hobby) | $0.00 |
+| **Vercel Functions** | API Backend (Python) | Free Tier (100k req/mês) | $0.00 |
+| **Firebase Firestore** | Armazenamento de dados | Free Tier (Spark) | $0.00 |
+| **Google Gemini API** | Processamento NLP | Free Tier | $0.00 |
+| **Total Estimado** | Ambiente otimizado para TDE | - | **$0.00** |
