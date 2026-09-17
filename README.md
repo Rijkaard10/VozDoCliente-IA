@@ -1,7 +1,6 @@
 # Projeto TDE: VozDoCliente IA (Análise de Feedbacks)
 
-**Repositório:** [Inserir o link do seu GitHub aqui]
-**Alunos:** Rijkaard de Sousa de Andrade, [Nome 2], [Nome 3], [Nome 4]
+**Alunos:** Rijkaard de Sousa de Andrade, Diego Paim, Erik nogueira, Rafael
 **Disciplina:** Computação em Nuvem (Unifan 2026.2)
 
 ---
@@ -52,4 +51,12 @@ sequenceDiagram
 
 6. Estrutura de Banco de Dados (Firestore NoSQL)Utilizaremos o modelo baseado em documentos para flexibilidade e velocidade de leitura.Coleção: feedbacks_analisadosid: String (Gerado automaticamente)cliente_nome: Stringfeedback_original: Stringsentimento: String (Enum: POSITIVO, NEGATIVO, NEUTRO)plano_de_acao: String (Gerado pelo Gemini)data_envio: Timestamp
 
-7. Detalhamento de Custos Mensais (Planejamento)O projeto foi rigorosamente desenhado para se manter dentro dos limites do Free Tier (Nível Gratuito) das plataformas escolhidas.Serviço / RecursoFunção na ArquiteturaPlano UtilizadoCusto (USD)Vercel HostingHospedagem do Frontend estáticoHobby Tier (Gratuito)$0.00Vercel FunctionsAPI Backend Serverless (Python)Hobby Tier (100k req/mês)$0.00Firebase FirestoreBanco de Dados NoSQLSpark Plan (1GB, 50k leituras/dia)$0.00Google Gemini APIProcessamento de IA e NLPFree Tier (Limites de RPM padrão)$0.00GitHubRepositório, CI/CD e SecretsFree Plan$0.00Total Mensal EstimadoAmbiente completo de produção-$0.00
+7. Detalhamento de Custos Mensais (Planejamento)O projeto foi rigorosamente desenhado para se manter dentro dos limites do Free Tier (Nível Gratuito) das plataformas escolhidas.
+
+Serviço / Recurso	Função na Arquitetura	Plano Utilizado	Custo (USD)
+Vercel Hosting	Hospedagem do Frontend estático	Hobby Tier (Gratuito)	$0.00
+Vercel Functions	API Backend Serverless (Python)	Hobby Tier (100k req/mês)	$0.00
+Firebase Firestore	Banco de Dados NoSQL	Spark Plan (1GB, 50k leituras/dia)	$0.00
+Google Gemini API	Processamento de IA e NLP	Free Tier (Limites de RPM padrão)	$0.00
+GitHub	Repositório, CI/CD e Secrets	Free Plan	$0.00
+Total Mensal Estimado	Ambiente completo de produção	-	$0.00
