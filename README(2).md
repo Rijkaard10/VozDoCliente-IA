@@ -3,11 +3,7 @@
 Planejamento técnico e arquitetural do Projeto 4 — Análise de Feedbacks de Usuários com Integração de APIs de IA.
 
 **Disciplina:** Computação em Nuvem — UNIFAN, 2026.2  
-**Integrante identificado:** Rijkaard de Sousa de Andrade  
-**Demais integrantes:** [PREENCHER com os nomes do grupo já formado]  
-**Repositório:** [PREENCHER com a URL do repositório já criado]  
-**Etapa:** primeira entrega de planejamento  
-**Data da revisão documental:** 17/09/2026
+**Integrantes:** Rijkaard de Sousa, Diego Paim, Erik Nogueira, Rafael
 
 Este documento descreve como desenvolveremos uma plataforma que recebe avaliações de clientes, classifica o sentimento com IA e sugere ações para o gestor. As funcionalidades, testes e configurações técnicas abaixo são planejados; sua conclusão dependerá da implementação e das evidências de execução.
 
@@ -42,19 +38,6 @@ O diferencial será gerar também uma sugestão de plano de ação. Por exemplo,
 | RF09 | Documentar e testar a API | Disponibilizar contrato OpenAPI e roteiro de teste no Postman. |
 
 Integrações com WhatsApp, múltiplas empresas, envio de mensagens, cobrança e treinamento de modelo próprio ficam fora do protótipo inicial. RF01 a RF03 e a persistência formam o núcleo do Projeto 4; o painel e a gestão de ações complementam a proposta.
-
-### 1.4 Situação da primeira entrega
-
-Etapas organizacionais informadas como concluídas pelo grupo:
-
-- [x] Montagem do grupo.
-- [x] Criação do repositório e adição do professor.
-- [x] Criação do NotebookLM com o contexto do projeto.
-- [x] Criação da Gem e uso do documento no chat.
-- [x] Escolha do projeto e do diferencial.
-- [x] Elaboração deste planejamento em 11 seções.
-- [ ] Implementação e validação do fluxo completo.
-- [ ] Registro das evidências de testes, deploy e consumo real.
 
 ## 2. Jornadas de Usuário e Usabilidade
 
