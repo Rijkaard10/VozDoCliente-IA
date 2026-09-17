@@ -1,7 +1,6 @@
 # Projeto TDE: VozDoCliente IA (Análise de Feedbacks)
 
-**Repositório:** [Link do seu GitHub]
-**Alunos:** Rijkaard de Sousa de Andrade, [Nome 2], [Nome 3], [Nome 4]
+**Alunos:** Rijkaard Sousa, Diego Paim, Erik Nogueira, Rafael
 **Disciplina:** Computação em Nuvem (Unifan 2026.2)
 
 ---
