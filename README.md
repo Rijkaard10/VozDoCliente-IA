@@ -4,8 +4,7 @@ Planejamento técnico e arquitetural do Projeto 4 — Análise de Feedbacks de U
 
 **Disciplina:** Computação em Nuvem — UNIFAN, 2026.2  
 **Integrante identificado:** Rijkaard de Sousa de Andrade  
-**Demais integrantes:** [PREENCHER com os nomes do grupo já formado]  
-**Repositório:** [PREENCHER com a URL do repositório já criado]  
+**Demais integrantes:** Rijkaard Sousa, Erik Nogueira, Diego Paim, Rafael
 **Etapa:** primeira entrega de planejamento  
 **Data da revisão documental:** 17/09/2026
 
